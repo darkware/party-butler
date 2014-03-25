@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="jjmpeg-0.11.1a1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jjmpeg-0.11.1a1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,2 +1,2 @@
-party-buttler
+party-butler
 =============

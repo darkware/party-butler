@@ -7,6 +7,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="jaudiotagger-2.2.0-20130321.162819-3" level="project" />
+    <orderEntry type="library" name="jl1.0.1" level="project" />
+    <orderEntry type="library" name="jjmpeg-0.11.1a1" level="project" />
+    <orderEntry type="library" name="log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" name="com.github.axet:vget:1.1.5" level="project" />
   </component>
 </module>
 
