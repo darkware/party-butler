@@ -1,8 +1,12 @@
 package partybutler.song.info;
 
+import partybutler.Constants;
 import partybutler.player.files.interfaces.MediaFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -13,17 +17,30 @@ public class Album {
     private String name;
     private File albumArt;
     private ArrayList<MediaFile> mediaFiles;
+    private BufferedImage albumImage;
+    private Artist artist;
 
-
-    public Album(String name) {
+    public Album(String name, Artist artist) {
         this.name = name;
+        this.artist = artist;
         mediaFiles = new ArrayList<MediaFile>();
+        try {
+            albumImage = ImageIO.read(new File(Constants.PLACEHOLDER_IMAGE_PATH));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public Album(String name, File albumArt) {
+    public Album(String name, Artist artist, File albumArt) {
         this.name = name;
+        this.artist = artist;
         this.albumArt = albumArt;
         mediaFiles = new ArrayList<MediaFile>();
+        try {
+            albumImage = ImageIO.read(albumArt);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadAlbumArt(){
@@ -75,6 +92,14 @@ public class Album {
         return true;
     }
 
+    public Artist getArtist() {
+        return artist;
+    }
+
+    public void setArtist(Artist artist) {
+        this.artist = artist;
+    }
+
     @Override
     public int hashCode() {
         return name.hashCode();
@@ -86,5 +111,14 @@ public class Album {
      */
     public void merge(Album newAlbum) {
         addMediaFiles(newAlbum.getMediaFiles());
+    }
+
+    public BufferedImage getImage() {
+       return albumImage;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

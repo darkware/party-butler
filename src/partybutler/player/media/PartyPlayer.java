@@ -1,10 +1,13 @@
 package partybutler.player.media;
 
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.advanced.AdvancedPlayer;
-import javazoom.jl.player.advanced.PlaybackListener;
+import javazoom.jlgui.basicplayer.BasicPlayer;
+import javazoom.jlgui.basicplayer.BasicPlayerException;
+import javazoom.jlgui.basicplayer.BasicPlayerListener;
 import partybutler.player.files.interfaces.MediaFile;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -13,11 +16,12 @@ import java.io.IOException;
 
 public class PartyPlayer {
     private MediaFile mediaFile = null;
-    private AdvancedPlayer player = null;
+    private BasicPlayer player = null;
     private static PartyPlayer instance = new PartyPlayer();
-    private PlaybackListener playBackListener;
+    private BasicPlayerListener playBackListener;
 
     private PartyPlayer() {
+        player = new BasicPlayer();
     }
 
     /**
@@ -28,43 +32,34 @@ public class PartyPlayer {
     }
 
     /**
-     * Initializes the player
-     */
-    private void initializePlayer() {
-        if (mediaFile != null && mediaFile.isReadable()) {
-            try {
-                player = new AdvancedPlayer(mediaFile.getMediaInputStream());
-                if(playBackListener != null){
-                    player.setPlayBackListener(playBackListener);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JavaLayerException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
      * Adds the @PlaybackListener to the player
+     *
      * @param listener
      */
-    public void setPlaybackListener(PlaybackListener listener){
+    public void setBasicPlayerListener(BasicPlayerListener listener) {
         playBackListener = listener;
+        player.addBasicPlayerListener(playBackListener);
     }
 
     /**
      * Starts the music if the media file has been set
+     *
      * @return True if the music could be started, false otherwise
      */
     public boolean start() {
-        initializePlayer();
 
-        if (player != null) {
+        if (player != null && mediaFile != null && mediaFile.isReadable()) {
             try {
+                player.open(AudioSystem.getAudioInputStream(mediaFile.getMediaInputStream()));
                 player.play();
                 return true;
-            } catch (JavaLayerException e) {
+            } catch (BasicPlayerException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -76,13 +71,53 @@ public class PartyPlayer {
      */
     public void stop() {
         if (player != null) {
-            player.close();
+            try {
+                player.stop();
+            } catch (BasicPlayerException e) {
+                e.printStackTrace();
+            }
         }
-        player = null;
+    }
+
+    /**
+     * Pauses the playback
+     */
+    public void pause() {
+        if (player != null) {
+            try {
+                player.pause();
+            } catch (BasicPlayerException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Sets the Volume
+     *
+     * @param volume int value between 0 and 100
+     */
+    public void setVolume(int volume) {
+        if (player != null && volume >= 0 && volume <= 100) {
+            try {
+                player.setGain(((double) volume) / 100);
+            } catch (BasicPlayerException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Checks if music is playing
+     * @return true if music is playing, false otherwise
+     */
+    public boolean isRunning() {
+        return player.getStatus() == BasicPlayer.PLAYING;
     }
 
     /**
      * Gets the current partybutler.player.media.PartyPlayer instance
+     *
      * @return instance of @partybutler.player.media.PartyPlayer
      */
     public static PartyPlayer getInstance() {

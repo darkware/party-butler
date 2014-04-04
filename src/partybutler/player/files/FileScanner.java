@@ -31,7 +31,9 @@ public class FileScanner {
     private TimerTask timerTask = new TimerTask() {
         @Override
         public void run() {
-            checkDirectories();      
+            checkDirectories();
+            //Save the Library
+            SettingsManager.getInstance().saveLibraryToFile();
         }
     };
 
@@ -66,9 +68,6 @@ public class FileScanner {
 
                         @Override
                         public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                            //Save the Library
-                            SettingsManager.getInstance().saveLibraryToFile();
-
                             return FileVisitResult.CONTINUE;
                         }
                     });

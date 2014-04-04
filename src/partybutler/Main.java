@@ -2,12 +2,12 @@ package partybutler;
 
 import partybutler.player.files.FileScanner;
 import partybutler.player.files.Library;
-import partybutler.player.files.interfaces.MediaFile;
-import partybutler.player.files.queue.PublicQueue;
-import partybutler.player.files.settings.SettingsManager;
-import partybutler.player.media.PartyPlayer;
-import partybutler.song.info.Album;
-import partybutler.song.info.Artist;
+import partybutler.player.files.queue.QueueManager;
+import partybutler.player.files.settings.ConfigManager;
+import partybutler.ui.MainFrame;
+
+import javax.swing.*;
+import java.io.File;
 
 /**
  * Created by Administrator on 22.03.2014.
@@ -15,20 +15,39 @@ import partybutler.song.info.Artist;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
-       /* File mediafile = new File("D:\\Downloads\\");
-        FileScanner scanner = FileScanner.getInstance();
-        scanner.addDirectoryToWatch(mediafile);
-        scanner.startMonitoring();*/
 
         //TODO: Change to real Configuration
         org.apache.log4j.BasicConfigurator.configure();
 
-        /*ConfigManager.getInstance().addWatchedDirectory(new File("D:\\Downloads\\2000's Music\\"));
+
+
+        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(laf.getName())){
+                try {
+                    UIManager.setLookAndFeel(laf.getClassName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        ConfigManager.getInstance().addWatchedDirectory(new File("D:\\Downloads\\"));
+        QueueManager.getInstance();
 
         FileScanner scanner = FileScanner.getInstance();
-        scanner.startMonitoring();*/
+        scanner.startMonitoring();
 
-        SettingsManager.getInstance().readConfigsFromFile();
+        while(Library.getInstance().getSongCount() < 20){
+            Thread.sleep(500);
+        }
+
+        MainFrame frame = null;
+        frame = new MainFrame();
+        frame.setVisible(true);
+        frame.setEntryList(Library.getInstance().getArtists());
+
+        /*SettingsManager.getInstance().readConfigsFromFile();
         FileScanner scanner = FileScanner.getInstance();
         scanner.startMonitoring();
 
@@ -46,8 +65,8 @@ public class Main {
             }
         }
         queue.getNextMediaFile();
-        PartyPlayer.getInstance().setMediaFile(queue.getNextMediaFile());
-        PartyPlayer.getInstance().start();
+        PartyPlayer.getInstance().setNowPlaying(queue.getNextMediaFile());
+        PartyPlayer.getInstance().start();*/
 
         /*try {
             SettingsManager.getInstance().readLibraryFromFile();
@@ -61,7 +80,7 @@ public class Main {
                 }
             }
             queue.getNextMediaFile();
-            PartyPlayer.getInstance().setMediaFile(queue.getNextMediaFile());
+            PartyPlayer.getInstance().setNowPlaying(queue.getNextMediaFile());
             PartyPlayer.getInstance().start();
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,13 +119,13 @@ public class Main {
         queue.enqueue(mediaFile2);
 
         Logger.getRootLogger().debug("Playing queued song: "+queue.getNextMediaTitle());
-        PartyPlayer.getInstance().setMediaFile(queue.getNextMediaFile());
+        PartyPlayer.getInstance().setNowPlaying(queue.getNextMediaFile());
         PartyPlayer.getInstance().setPlaybackListener(new PlaybackListener() {
             @Override
             public void playbackFinished(PlaybackEvent playbackEvent) {
                 MediaFile nextMediaFile = PublicQueue.getInstance().getNextMediaFile();
                 if (nextMediaFile != null) {
-                    PartyPlayer.getInstance().setMediaFile(nextMediaFile);
+                    PartyPlayer.getInstance().setNowPlaying(nextMediaFile);
                     PartyPlayer.getInstance().start();
                 }
                 //super.playbackFinished(playbackEvent);

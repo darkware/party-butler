@@ -1,5 +1,7 @@
 package partybutler.song.info;
 
+import partybutler.player.files.interfaces.MediaFile;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -58,6 +60,14 @@ public class Artist {
         return albums;
     }
 
+    public ArrayList<MediaFile> getAllMediaFiles() {
+        ArrayList<MediaFile> songs = new ArrayList<MediaFile>();
+        for (Album album : getAlbums()) {
+            songs.addAll(album.getMediaFiles());
+        }
+        return songs;
+    }
+
     public String getName() {
         return name;
     }
@@ -98,6 +108,6 @@ public class Artist {
 
     @Override
     public String toString() {
-        return name + " - Album Count: " + albums.size();
+        return name;
     }
 }

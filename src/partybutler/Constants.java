@@ -47,4 +47,29 @@ public class Constants {
 
     public static final String LIBRARY_FILE_PATH = "data/conf/library.ini";
     public static final String CONFIGS_FILE_PATH = "data/conf/configs.ini";
+    public static final String APPLICATION_NAME = "Party Butler";
+
+    public static final String ALBUM_ALL = "<All Albums>";
+    public static final String SONG_ALL = "<All Songs>";
+
+    public static final int LISTENER_ACTION_ID_ENQUEUED_FIRST = 1;
+    public static final int LISTENER_ACTION_ID_ENQUEUED_LAST = 2;
+
+    /*
+    UI Constants
+     */
+
+    public static final String VOLUME_TEXT = "Volume: ";
+    public static final String NO_ARTIST_TEXT = "No artist selected.";
+    public static final String NO_ALBUM_TEXT = "No album selected.";
+    public static final String NO_TITLE_TEXT = "No song selected.";
+
+    public static final String PLACEHOLDER_IMAGE_PATH = "data\\placeholder.jpg";
+
+    public static final int LISTTYPE_ARTIST = 0;
+    public static final int LISTTYPE_ALBUM = 1;
+    public static final int LISTTYPE_COVERFLOW = 2;
+    public static final int LISTTYPE_TITLE = 3;
+
+    public static final String NO_SONG_PLAYING = "No song playing.";
 }

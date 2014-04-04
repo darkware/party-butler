@@ -1,5 +1,8 @@
 package partybutler.player.files.interfaces;
 
+import partybutler.song.info.Album;
+import partybutler.song.info.Artist;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -37,5 +40,19 @@ public interface MediaFile {
      */
     public int getMediaType();
 
-    public boolean equals(MediaFile other);
+    /**
+     * Gets the Artist of the Song
+     * @return Artist of the Media File
+     */
+    public Artist getArtist();
+
+    /**
+     * Gets the Album the Song is on
+     * @return Album the Song is on
+     */
+    public Album getAlbum();
+
+    public boolean equals(Object other);
+
+    public String toString();
 }

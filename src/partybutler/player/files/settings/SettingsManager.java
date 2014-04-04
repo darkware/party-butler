@@ -69,14 +69,14 @@ public class SettingsManager {
             File artistArtFile = new File(artist.get(Constants.ARTISTARTFIELD).getAsString());
 
             Artist artistObject = new Artist(artistName, artistArtFile);
-            artistObject.addAlbums(extractAlbums(artist));
+            artistObject.addAlbums(extractAlbums(artist, artistObject));
             artistArrayList.add(artistObject);
         }
 
         return artistArrayList;
     }
 
-    private ArrayList<Album> extractAlbums(JsonObject artist) throws Exception {
+    private ArrayList<Album> extractAlbums(JsonObject artist, Artist artistObject) throws Exception {
         ArrayList<Album> albumArrayList = new ArrayList<Album>();
 
         JsonArray albums = artist.getAsJsonArray(Constants.ARTISTALBUMSARRAYNAME);
@@ -86,14 +86,14 @@ public class SettingsManager {
             String albumName = albumObject.get(Constants.ALBUMNAMEFIELD).getAsString();
             File albumArtFile = new File(albumObject.get(Constants.ALBUMARTFIELD).getAsString());
 
-            Album albumEntry = new Album(albumName, albumArtFile);
-            albumEntry.addMediaFiles(extractSongs(albumObject));
+            Album albumEntry = new Album(albumName, artistObject , albumArtFile);
+            albumEntry.addMediaFiles(extractSongs(albumObject, albumEntry, artistObject));
             albumArrayList.add(albumEntry);
         }
         return albumArrayList;
     }
 
-    private ArrayList<MediaFile> extractSongs(JsonObject albumObject) throws Exception {
+    private ArrayList<MediaFile> extractSongs(JsonObject albumObject, Album albumEntry, Artist artistObject) throws Exception {
         ArrayList<MediaFile> mediaFileArrayList = new ArrayList<MediaFile>();
 
         JsonArray songs = albumObject.getAsJsonArray(Constants.ALBUMSONGSARRAYNAME);
@@ -106,7 +106,7 @@ public class SettingsManager {
             MediaFile file = null;
             switch (mediaType.intValue()) {
                 case Constants.TYPE_MP3:
-                    file = new Mp3MediaFile(mediaPath, title);
+                    file = new Mp3MediaFile(mediaPath,artistObject,albumEntry, title);
                     break;
                 default:
                     throw new Exception("Media Type not Covered. Fix this!");

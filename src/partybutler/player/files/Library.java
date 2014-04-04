@@ -1,5 +1,6 @@
 package partybutler.player.files;
 
+import partybutler.player.files.interfaces.MediaFile;
 import partybutler.song.info.Album;
 import partybutler.song.info.Artist;
 
@@ -31,10 +32,10 @@ public class Library {
         }
     }
 
-    public synchronized int getSongCount(){
+    public synchronized int getSongCount() {
         int count = 0;
-        for(Artist artist : artists){
-            for(Album album : artist.getAlbums()){
+        for (Artist artist : artists) {
+            for (Album album : artist.getAlbums()) {
                 count += album.getSongCount();
             }
         }
@@ -44,6 +45,26 @@ public class Library {
 
     public synchronized ArrayList<Artist> getArtists() {
         return artists;
+    }
+
+    public synchronized ArrayList<Album> getAllAlbums() {
+        ArrayList<Album> albums = new ArrayList<Album>();
+
+        for (Artist artist : artists) {
+            albums.addAll(artist.getAlbums());
+        }
+
+        return albums;
+    }
+
+    public synchronized ArrayList<MediaFile> getAllMediaFiles() {
+        ArrayList<MediaFile> albums = new ArrayList<MediaFile>();
+
+        for (Album album : getAllAlbums()) {
+            albums.addAll(album.getMediaFiles());
+        }
+
+        return albums;
     }
 
     public static Library getInstance() {

@@ -27,10 +27,11 @@ public class MediaInfoExtractor {
 
     /**
      * Extracts the ID3 Info from an Mp3MediaFile and Creates an Artist with the Album that contains the given Song (For Merging in the Library)
+     *
      * @param mp3MediaFile - The File to the given mp3 file
      * @return - Artists with Proper ID3 Information containing the Album and the Song
      */
-    public Artist extractMediaInfo(File mp3MediaFile){
+    public Artist extractMediaInfo(File mp3MediaFile) {
         String artist, title, album;
         StringBuffer buffer = new StringBuffer();
         try {
@@ -88,8 +89,8 @@ public class MediaInfoExtractor {
                 title = title.replaceAll(".mp3", "");
             }
             Artist newArtist = new Artist(artist);
-            Album newAlbum = new Album(album);
-            Mp3MediaFile mediaFile = new Mp3MediaFile(mp3MediaFile,title);
+            Album newAlbum = new Album(album, newArtist);
+            Mp3MediaFile mediaFile = new Mp3MediaFile(mp3MediaFile, newArtist, newAlbum, title);
             newAlbum.addMediaFile(mediaFile);
             newArtist.addAlbum(newAlbum);
 

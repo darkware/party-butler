@@ -2,6 +2,8 @@ package partybutler.player.files.mediatypes;
 
 import partybutler.Constants;
 import partybutler.player.files.interfaces.MediaFile;
+import partybutler.song.info.Album;
+import partybutler.song.info.Artist;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,10 +18,16 @@ public class Mp3MediaFile implements MediaFile {
 
     private File mediaFile = null;
     private String title = null;
+    private Artist artist = null;
+    private Album album = null;
 
-    public Mp3MediaFile(File mediaFile, String title) {
+
+
+    public Mp3MediaFile(File mediaFile, Artist artist, Album album, String title) {
         this.mediaFile = mediaFile;
         this.title = title;
+        this.artist = artist;
+        this.album = album;
     }
 
     @Override
@@ -49,17 +57,47 @@ public class Mp3MediaFile implements MediaFile {
     }
 
     @Override
-    public boolean equals(MediaFile o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        if (!title.equals(o.getTitle())) return false;
+        Mp3MediaFile mediaFile1 = (Mp3MediaFile) o;
+
+        if (!album.equals(mediaFile1.album)) return false;
+        if (!artist.equals(mediaFile1.artist)) return false;
+        if (!mediaFile.equals(mediaFile1.mediaFile)) return false;
+        if (!title.equals(mediaFile1.title)) return false;
 
         return true;
     }
 
+    public Artist getArtist() {
+        return artist;
+    }
+
+    public void setArtist(Artist artist) {
+        this.artist = artist;
+    }
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
     @Override
     public int hashCode() {
-        return title != null ? title.hashCode() : 0;
+        int result = mediaFile.hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + artist.hashCode();
+        result = 31 * result + album.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }

@@ -25,12 +25,17 @@ public class YoutubeManager {
             @Override
             public void run() {
                 Logger.getRootLogger().debug("Adding Youtube Media to Library");
-                Mp3MediaFile mediaFile = new Mp3MediaFile(youtubeDownloader.getOutputFile(),youtubeDownloader.getTitle());
-                Logger.getRootLogger().debug("Media File: "+youtubeDownloader.getOutputFile().getAbsolutePath());
-                Album album = new Album(Constants.UNKNOWN_ALBUM);
-                album.addMediaFile(mediaFile);
+
                 Artist artist = new Artist(Constants.YOUTUBE_ARTIST);
+
+                Album album = new Album(Constants.UNKNOWN_ALBUM, artist);
                 artist.addAlbum(album);
+
+                Mp3MediaFile mediaFile = new Mp3MediaFile(youtubeDownloader.getOutputFile(),artist, album , youtubeDownloader.getTitle());
+                album.addMediaFile(mediaFile);
+
+                Logger.getRootLogger().debug("Media File: "+youtubeDownloader.getOutputFile().getAbsolutePath());
+
                 Logger.getRootLogger().debug("Adding Downloaded Youtube Media to Library");
                 Library.getInstance().addArtist(artist);
             }
